@@ -1,0 +1,21 @@
+body {
+    padding: 30px;
+    font-family: "Abel", Helvetica, Arial, sans-serif;
+}
+
+p {
+    color: #777;
+}
+
+h2.title {
+    font-family: Play;
+    color: #8AC58A;
+}
+
+.container .jumbotron {
+    padding: 10px 40px;
+}
+
+.detailed {
+    font-size: 20px;
+}

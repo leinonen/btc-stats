@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mining monitor">
+    <meta name="author" content="Peter Leinonen">
+    <title>Mining monitor</title>
+    <link type="text/css" rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="css/main.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+</head>
+<body ng-app="application">
+
+<div class="container" ng-controller="StatsCtrl as stats">
+    <div class="row">
+        <div class="col-sm-4">
+
+            <balance btc="{{stats.user.balances.BTC}}"
+                     nmc="{{stats.user.balances.NMC}}"></balance>
+
+            <hash-rate userhash="{{stats.user.hash_rate}}"
+                       poolhash="{{stats.pool.hash_rate}}"></hash-rate>
+
+        </div>
+
+        <div class="col-sm-8">
+
+            <div class="alert alert-danger" ng-show="stats.showMessage">
+                <p>{{stats.message}}</p>
+            </div>
+
+
+            <h2 class="title">Workers</h2>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Alive</th>
+                        <th>Name</th>
+                        <th title="Proofs of work that would create a block at difficulty 1. Most will not actually create a block but serve as a measure of the amount of work done by each user.">
+                            Accepted
+                        </th>
+                        <th title="Proofs of work that were rejected because they were based on stale data.">Rejected
+                        </th>
+                        <th>Last work</th>
+                    </tr>
+                    <tr ng-repeat="worker in stats.user.workers">
+                        <td>{{worker.alive ? 'YES' : 'NO'}}</td>
+                        <td>{{worker.name}}</td>
+                        <td>{{worker.work.BTC.total_accepted | number}}</td>
+                        <td>{{worker.work.BTC.total_rejected | number}}</td>
+                        <td>{{worker.last_work * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <h2 class="title">Current shift</h2>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Start</th>
+                        <th>Accepted</th>
+                        <th>Rejected</th>
+                        <th>Score (New shift at 0.1)</th>
+                    </tr>
+                    <tr>
+                        <td>{{stats.user.shift.start * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{stats.user.shift.accepted | number}}</td>
+                        <td>{{stats.user.shift.rejected | number}}</td>
+                        <td>{{stats.user.shift.total_score | number}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2 class="title">Shift history</h2>
+
+            <p>Work is measured in proofs of work. Each proof of work is given a score equal to one divided by the
+                difficulty at the time it was submitted. Proofs of work are grouped in shifts. A shift is completed
+                when its total score passes 0.1. Whenever new coins are minted, they are divided between
+                contributing members proportionally to the total score each member has within the last 10 completed
+                shifts.</p>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Difficulty</th>
+                        <th>Completed</th>
+                        <th>Duration</th>
+                        <th>Accepted</th>
+                        <th>Rejected</th>
+                        <th>Score</th>
+                    </tr>
+                    <tr ng-repeat="shift in stats.shifts">
+                        <td>{{shift.id}}</td>
+                        <td>{{shift.difficulty | number}}</td>
+                        <td>{{shift.completed * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{shift.duration / 60 / 60 | number}} hrs</td>
+                        <td>{{shift.accepted | number}}</td>
+                        <td>{{shift.rejected | number}}</td>
+                        <td>{{shift.score | number}}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="lib/angular/angular.min.js"></script>
+<script type="text/javascript" src="modules/application.js"></script>
+
+</body>
+</html>
+
