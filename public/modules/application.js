@@ -10,6 +10,7 @@
 			vm.user = {};
 			vm.pool = {};
 			vm.shifts = {};
+			vm.blocks = {};
 
 			vm.message = '';
 			vm.showMessage = false;
@@ -26,6 +27,10 @@
 				vm.shifts = response.data;
 			}
 
+			function updateBlocks(response){
+				vm.blocks = response.data;
+			}
+
 			function handleError() {
 				vm.message = 'Server not responding.';
 				vm.showMessage = true;
@@ -35,6 +40,7 @@
 				$http.get('/api/user').then(updateUser, handleError);
 				$http.get('/api/pool/stats').then(updatePool, handleError);
 				$http.get('/api/pool/shifts').then(updateShifts, handleError);
+				$http.get('/api/pool/blocks').then(updateBlocks, handleError);
 			}
 
 			fetchData();

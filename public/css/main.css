@@ -19,3 +19,11 @@ h2.title {
 .detailed {
     font-size: 20px;
 }
+
+.orphan {
+    color: red;
+}
+
+.confirmed {
+    color: green;
+}

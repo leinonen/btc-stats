@@ -13,22 +13,22 @@
 </head>
 <body ng-app="application">
 
-<div class="container" ng-controller="StatsCtrl as stats">
+<div class="container" ng-controller="StatsCtrl as vm">
     <div class="row">
         <div class="col-sm-4">
 
-            <balance btc="{{stats.user.balances.BTC}}"
-                     nmc="{{stats.user.balances.NMC}}"></balance>
+            <balance btc="{{vm.user.balances.BTC}}"
+                     nmc="{{vm.user.balances.NMC}}"></balance>
 
-            <hash-rate userhash="{{stats.user.hash_rate}}"
-                       poolhash="{{stats.pool.hash_rate}}"></hash-rate>
+            <hash-rate userhash="{{vm.user.hash_rate}}"
+                       poolhash="{{vm.pool.hash_rate}}"></hash-rate>
 
         </div>
 
         <div class="col-sm-8">
 
-            <div class="alert alert-danger" ng-show="stats.showMessage">
-                <p>{{stats.message}}</p>
+            <div class="alert alert-danger" ng-show="vm.showMessage">
+                <p>{{vm.message}}</p>
             </div>
 
 
@@ -46,7 +46,7 @@
                         </th>
                         <th>Last work</th>
                     </tr>
-                    <tr ng-repeat="worker in stats.user.workers">
+                    <tr ng-repeat="worker in vm.user.workers">
                         <td>{{worker.alive ? 'YES' : 'NO'}}</td>
                         <td>{{worker.name}}</td>
                         <td>{{worker.work.BTC.total_accepted | number}}</td>
@@ -56,6 +56,32 @@
                 </table>
             </div>
 
+            <h2 class="title">Blocks (BTC only)</h2>
+
+            <p>New bitcoins are created as part of bitcoin blocks. The blocks are built on top of each other in a chain. This page shows the blocks generated at BitMinter. If someone else builds a block at the same height as us, one of the blocks (theirs or ours) will become orphaned and yield no coins. If the block is orphaned upon creation it will be listed as stale. This can happen if a proof of work for creating a block is submitted too late, after we have already started building at the next height.</p>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Height</th>
+                        <th>Difficulty</th>
+                        <th>Generated</th>
+                        <th>Duration</th>
+                        <th>Accepted</th>
+                        <th>Rejected</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="block in vm.blocks">
+                        <td>{{block.height}}</td>
+                        <td>{{block.difficulty | number}}</td>
+                        <td>{{block.generated * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{block.duration / 60 / 60 | number}} hrs</td>
+                        <td>{{block.accepted | number}}</td>
+                        <td>{{block.rejected | number}}</td>
+                        <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">{{block.status}}</td>
+                    </tr>
+                </table>
+            </div>
 
             <h2 class="title">Current shift</h2>
 
@@ -68,10 +94,10 @@
                         <th>Score (New shift at 0.1)</th>
                     </tr>
                     <tr>
-                        <td>{{stats.user.shift.start * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                        <td>{{stats.user.shift.accepted | number}}</td>
-                        <td>{{stats.user.shift.rejected | number}}</td>
-                        <td>{{stats.user.shift.total_score | number}}</td>
+                        <td>{{vm.user.shift.start * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{vm.user.shift.accepted | number}}</td>
+                        <td>{{vm.user.shift.rejected | number}}</td>
+                        <td>{{vm.user.shift.total_score | number}}</td>
                     </tr>
                 </table>
             </div>
@@ -93,19 +119,20 @@
                         <th>Duration</th>
                         <th>Accepted</th>
                         <th>Rejected</th>
-                        <th>Score</th>
                     </tr>
-                    <tr ng-repeat="shift in stats.shifts">
+                    <tr ng-repeat="shift in vm.shifts">
                         <td>{{shift.id}}</td>
                         <td>{{shift.difficulty | number}}</td>
                         <td>{{shift.completed * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                         <td>{{shift.duration / 60 / 60 | number}} hrs</td>
                         <td>{{shift.accepted | number}}</td>
                         <td>{{shift.rejected | number}}</td>
-                        <td>{{shift.score | number}}</td>
                     </tr>
                 </table>
             </div>
+
+
+
 
         </div>
 
