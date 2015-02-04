@@ -63,7 +63,9 @@
 			replace: 'true',
 			scope: {
 				userhash: '@',
-				poolhash: '@'
+				poolhash: '@',
+				workers: '@',
+				users: '@'
 			},
 			link: function(scope, elem, attrs){
 

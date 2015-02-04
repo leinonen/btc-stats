@@ -7,6 +7,10 @@ p {
     color: #777;
 }
 
+h2, .h2 {
+    font-size: 35px;
+}
+
 h2.title {
     font-family: Play;
     color: #8AC58A;

@@ -6,7 +6,8 @@
     <meta name="description" content="Mining monitor">
     <meta name="author" content="Peter Leinonen">
     <title>Mining monitor</title>
-    <link type="text/css" rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css"/>
+    <!--<link type="text/css" rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css"/>-->
+    <link type="text/css" rel="stylesheet" href="css/theme.css"/>
     <link type="text/css" rel="stylesheet" href="css/main.css"/>
     <link href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
@@ -21,7 +22,9 @@
                      nmc="{{vm.user.balances.NMC}}"></balance>
 
             <hash-rate userhash="{{vm.user.hash_rate}}"
-                       poolhash="{{vm.pool.hash_rate}}"></hash-rate>
+                       poolhash="{{vm.pool.hash_rate}}"
+                       workers="{{vm.pool.active_workers}}"
+                       users="{{vm.pool.active_users}}"></hash-rate>
 
         </div>
 
