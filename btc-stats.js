@@ -28,8 +28,14 @@ function getPoolShiftsJson(req, res) {
 	});
 }
 
-function getPoolBlocksJson(req, res) {
+function getPoolBlocksBTCJson(req, res) {
 	bitminter.get('pool/blocks', {max: 5, commodity:'BTC'}, function (err, stats) {
+		res.json(err || stats);
+	});
+}
+
+function getPoolBlocksNMCJson(req, res) {
+	bitminter.get('pool/blocks', {max: 5, commodity:'NMC'}, function (err, stats) {
 		res.json(err || stats);
 	});
 }
@@ -57,7 +63,8 @@ app.use(errorHandler);
 router.get('/api/user', getUserJson);
 router.get('/api/pool/stats', getPoolStatsJson);
 router.get('/api/pool/shifts', getPoolShiftsJson);
-router.get('/api/pool/blocks', getPoolBlocksJson);
+router.get('/api/pool/blocks/btc', getPoolBlocksBTCJson);
+router.get('/api/pool/blocks/nmc', getPoolBlocksNMCJson);
 
 app.listen(port);
 console.log('Listening on port ' + port);

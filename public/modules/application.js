@@ -27,8 +27,12 @@
 				vm.shifts = response.data;
 			}
 
-			function updateBlocks(response){
-				vm.blocks = response.data;
+			function updateBtcBlocks(response){
+				vm.blocks.BTC = response.data;
+			}
+
+			function updateNmcBlocks(response){
+				vm.blocks.NMC = response.data;
 			}
 
 			function handleError() {
@@ -40,7 +44,8 @@
 				$http.get('/api/user').then(updateUser, handleError);
 				$http.get('/api/pool/stats').then(updatePool, handleError);
 				$http.get('/api/pool/shifts').then(updateShifts, handleError);
-				$http.get('/api/pool/blocks').then(updateBlocks, handleError);
+				$http.get('/api/pool/blocks/btc').then(updateBtcBlocks, handleError);
+				$http.get('/api/pool/blocks/nmc').then(updateNmcBlocks, handleError);
 			}
 
 			fetchData();

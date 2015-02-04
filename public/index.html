@@ -56,7 +56,7 @@
                 </table>
             </div>
 
-            <h2 class="title">Blocks (BTC only)</h2>
+            <h2 class="title">Bitcoin Blocks</h2>
 
             <p>New bitcoins are created as part of bitcoin blocks. The blocks are built on top of each other in a chain. This page shows the blocks generated at BitMinter. If someone else builds a block at the same height as us, one of the blocks (theirs or ours) will become orphaned and yield no coins. If the block is orphaned upon creation it will be listed as stale. This can happen if a proof of work for creating a block is submitted too late, after we have already started building at the next height.</p>
 
@@ -71,7 +71,32 @@
                         <th>Rejected</th>
                         <th>Status</th>
                     </tr>
-                    <tr ng-repeat="block in vm.blocks">
+                    <tr ng-repeat="block in vm.blocks.BTC">
+                        <td>{{block.height}}</td>
+                        <td>{{block.difficulty | number}}</td>
+                        <td>{{block.generated * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{block.duration / 60 / 60 | number}} hrs</td>
+                        <td>{{block.accepted | number}}</td>
+                        <td>{{block.rejected | number}}</td>
+                        <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">{{block.status}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2 class="title">Namecoin Blocks</h2>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Height</th>
+                        <th>Difficulty</th>
+                        <th>Generated</th>
+                        <th>Duration</th>
+                        <th>Accepted</th>
+                        <th>Rejected</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="block in vm.blocks.NMC">
                         <td>{{block.height}}</td>
                         <td>{{block.difficulty | number}}</td>
                         <td>{{block.generated * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
@@ -130,8 +155,6 @@
                     </tr>
                 </table>
             </div>
-
-
 
 
         </div>
