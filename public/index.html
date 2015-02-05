@@ -15,20 +15,28 @@
 <body ng-app="application">
 
 <div class="container" ng-controller="StatsCtrl as vm">
-    <div class="row">
-        <div class="col-sm-4">
 
+    <div class="row">
+
+        <div class="col-sm-4">
             <balance btc="{{vm.user.balances.BTC}}"
                      nmc="{{vm.user.balances.NMC}}"></balance>
 
+
+        </div>
+        <div class="col-sm-5">
             <hash-rate userhash="{{vm.user.hash_rate}}"
                        poolhash="{{vm.pool.hash_rate}}"
                        workers="{{vm.pool.active_workers}}"
                        users="{{vm.pool.active_users}}"></hash-rate>
-
         </div>
+        <div class="col-sm-3">
+            <img src="images/rig.jpg" class="img-responsive"/>
+        </div>
+    </div>
+    <div class="row">
 
-        <div class="col-sm-8">
+        <div class="col-sm-12">
 
             <div class="alert alert-danger" ng-show="vm.showMessage">
                 <p>{{vm.message}}</p>
@@ -40,18 +48,20 @@
             <div class="table-responsive">
                 <table class="table">
                     <tr>
-                        <th>Alive</th>
-                        <th>Name</th>
-                        <th title="Proofs of work that would create a block at difficulty 1. Most will not actually create a block but serve as a measure of the amount of work done by each user.">
+                        <th class="col-sm-1">Alive</th>
+                        <th class="col-sm-2">Name</th>
+                        <th class="col-sm-3">Hashrate</th>
+                        <th  class="col-sm-2" title="Proofs of work that would create a block at difficulty 1. Most will not actually create a block but serve as a measure of the amount of work done by each user.">
                             Accepted
                         </th>
-                        <th title="Proofs of work that were rejected because they were based on stale data.">Rejected
+                        <th  class="col-sm-2" title="Proofs of work that were rejected because they were based on stale data.">Rejected
                         </th>
-                        <th>Last work</th>
+                        <th class="col-sm-2">Last work</th>
                     </tr>
                     <tr ng-repeat="worker in vm.user.workers">
                         <td>{{worker.alive ? 'YES' : 'NO'}}</td>
                         <td>{{worker.name}}</td>
+                        <td>{{worker.hash_rate / 1000.0}} Ghps</td>
                         <td>{{worker.work.BTC.total_accepted | number}}</td>
                         <td>{{worker.work.BTC.total_rejected | number}}</td>
                         <td>{{worker.last_work * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
@@ -59,20 +69,26 @@
                 </table>
             </div>
 
+            <p>New bitcoins are created as part of bitcoin blocks. The blocks are built on top of each other in a chain.
+                This page shows the blocks generated at BitMinter. If someone else builds a block at the same height as
+                us, one of the blocks (theirs or ours) will become orphaned and yield no coins. If the block is orphaned
+                upon creation it will be listed as stale. This can happen if a proof of work for creating a block is
+                submitted too late, after we have already started building at the next height.</p>
+
             <h2 class="title">Bitcoin Blocks</h2>
 
-            <p>New bitcoins are created as part of bitcoin blocks. The blocks are built on top of each other in a chain. This page shows the blocks generated at BitMinter. If someone else builds a block at the same height as us, one of the blocks (theirs or ours) will become orphaned and yield no coins. If the block is orphaned upon creation it will be listed as stale. This can happen if a proof of work for creating a block is submitted too late, after we have already started building at the next height.</p>
 
             <div class="table-responsive">
                 <table class="table">
                     <tr>
-                        <th>Height</th>
-                        <th>Difficulty</th>
-                        <th>Generated</th>
-                        <th>Duration</th>
-                        <th>Accepted</th>
-                        <th>Rejected</th>
-                        <th>Status</th>
+                        <th class="col-sm-1">Height</th>
+                        <th class="col-sm-2">Difficulty</th>
+                        <th class="col-sm-2">Generated</th>
+                        <th class="col-sm-1">Duration</th>
+                        <th class="col-sm-2">Accepted</th>
+                        <th class="col-sm-2">Rejected</th>
+                        <th class="col-sm-1">Status</th>
+                        <th class="col-sm-1"></th>
                     </tr>
                     <tr ng-repeat="block in vm.blocks.BTC">
                         <td>{{block.height}}</td>
@@ -81,7 +97,10 @@
                         <td>{{block.duration / 60 / 60 | number}} hrs</td>
                         <td>{{block.accepted | number}}</td>
                         <td>{{block.rejected | number}}</td>
-                        <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">{{block.status}}</td>
+                        <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">
+                            {{block.status}}
+                        </td>
+                        <td>{{block.confirmations_left}}</td>
                     </tr>
                 </table>
             </div>
@@ -91,13 +110,14 @@
             <div class="table-responsive">
                 <table class="table">
                     <tr>
-                        <th>Height</th>
-                        <th>Difficulty</th>
-                        <th>Generated</th>
-                        <th>Duration</th>
-                        <th>Accepted</th>
-                        <th>Rejected</th>
-                        <th>Status</th>
+                        <th class="col-sm-1">Height</th>
+                        <th class="col-sm-2">Difficulty</th>
+                        <th class="col-sm-2">Generated</th>
+                        <th class="col-sm-1">Duration</th>
+                        <th class="col-sm-2">Accepted</th>
+                        <th class="col-sm-2">Rejected</th>
+                        <th class="col-sm-1">Status</th>
+                        <th class="col-sm-1"></th>
                     </tr>
                     <tr ng-repeat="block in vm.blocks.NMC">
                         <td>{{block.height}}</td>
@@ -106,7 +126,10 @@
                         <td>{{block.duration / 60 / 60 | number}} hrs</td>
                         <td>{{block.accepted | number}}</td>
                         <td>{{block.rejected | number}}</td>
-                        <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">{{block.status}}</td>
+                        <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">
+                            {{block.status}}
+                        </td>
+                        <td>{{block.confirmations_left}}</td>
                     </tr>
                 </table>
             </div>
@@ -116,10 +139,10 @@
             <div class="table-responsive">
                 <table class="table">
                     <tr>
-                        <th>Start</th>
-                        <th>Accepted</th>
-                        <th>Rejected</th>
-                        <th>Score (New shift at 0.1)</th>
+                        <th class="col-sm-3">Start</th>
+                        <th class="col-sm-3">Accepted</th>
+                        <th class="col-sm-2">Rejected</th>
+                        <th class="col-sm-4">Score (New shift at 0.1)</th>
                     </tr>
                     <tr>
                         <td>{{vm.user.shift.start * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
@@ -141,12 +164,12 @@
             <div class="table-responsive">
                 <table class="table">
                     <tr>
-                        <th>ID</th>
-                        <th>Difficulty</th>
-                        <th>Completed</th>
-                        <th>Duration</th>
-                        <th>Accepted</th>
-                        <th>Rejected</th>
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-sm-2">Difficulty</th>
+                        <th class="col-sm-2">Completed</th>
+                        <th class="col-sm-1">Duration</th>
+                        <th class="col-sm-2">Accepted</th>
+                        <th class="col-sm-4">Rejected</th>
                     </tr>
                     <tr ng-repeat="shift in vm.shifts">
                         <td>{{shift.id}}</td>
