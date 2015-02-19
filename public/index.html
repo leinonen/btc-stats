@@ -22,17 +22,17 @@
             <balance btc="{{vm.user.balances.BTC}}"
                      nmc="{{vm.user.balances.NMC}}"></balance>
 
-
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <hash-rate userhash="{{vm.user.hash_rate}}"
                        poolhash="{{vm.pool.hash_rate}}"
                        workers="{{vm.pool.active_workers}}"
                        users="{{vm.pool.active_users}}"></hash-rate>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
+            <div class="jumbotron">
             <img src="images/rig.jpg" class="img-responsive"/>
-            <p>Last restart: {{vm.lastRestart | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -43,6 +43,8 @@
                 <p>{{vm.message}}</p>
             </div>
 
+
+            <h2 class="title">CGMiner <small>Last restart: {{vm.lastRestart | date:'yyyy-MM-dd HH:mm:ss'}}</small></h2>
 
             <h2 class="title">Workers</h2>
 
@@ -95,7 +97,7 @@
                         <td>{{block.height}}</td>
                         <td>{{block.difficulty | number}}</td>
                         <td>{{block.generated * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                        <td>{{block.duration / 60 / 60 | number}} hrs</td>
+                        <td>{{block.duration / 60 | ttlDateFormat}}</td>
                         <td>{{block.accepted | number}}</td>
                         <td>{{block.rejected | number}}</td>
                         <td ng-class="{orphan: block.status === 'orphaned', confirmed: block.status === 'confirmed'}">

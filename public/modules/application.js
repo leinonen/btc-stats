@@ -27,15 +27,15 @@
 				vm.shifts = response.data;
 			}
 
-			function updateBtcBlocks(response){
+			function updateBtcBlocks(response) {
 				vm.blocks.BTC = response.data;
 			}
 
-			function updateNmcBlocks(response){
+			function updateNmcBlocks(response) {
 				vm.blocks.NMC = response.data;
 			}
 
-			function updateLastRestart(response){
+			function updateLastRestart(response) {
 				vm.lastRestart = response.data.lastRestart;
 			}
 
@@ -73,7 +73,7 @@
 				workers: '@',
 				users: '@'
 			},
-			link: function(scope, elem, attrs){
+			link: function (scope, elem, attrs) {
 
 			},
 			templateUrl: 'modules/templates/hashrate.html'
@@ -89,12 +89,34 @@
 				btc: '@',
 				nmc: '@'
 			},
-			link: function(scope, elem, attrs){
+			link: function (scope, elem, attrs) {
 
 			},
 			templateUrl: 'modules/templates/balance.html'
 		};
 	});
 
+	app.filter('ttlDateFormat', [
+		function () {
+			return function (num) {
+				if (!angular.isNumber(num))
+					return num;
+
+				var returnNumber;
+				if (num / (60 * 24) >= 1) {
+					returnNumber = Math.round((num / (60 * 24)) * 100) / 100;
+					return returnNumber + " days";
+				}
+				else if (num / 60 >= 1) {
+					returnNumber = Math.round((num / 60) * 100) / 100;
+					return returnNumber + " hours";
+				}
+				else {
+					returnNumber = Math.round(num * 100) / 100;
+					return num + " minutes";
+				}
+			};
+		}
+	]);
 
 })();
