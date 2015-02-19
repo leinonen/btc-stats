@@ -35,6 +35,11 @@
 				vm.blocks.NMC = response.data;
 			}
 
+			function updateLastRestart(response){
+				vm.lastRestart = response.data.lastRestart;
+			}
+
+
 			function handleError() {
 				vm.message = 'Server not responding.';
 				vm.showMessage = true;
@@ -46,6 +51,7 @@
 				$http.get('/api/pool/shifts').then(updateShifts, handleError);
 				$http.get('/api/pool/blocks/btc').then(updateBtcBlocks, handleError);
 				$http.get('/api/pool/blocks/nmc').then(updateNmcBlocks, handleError);
+				$http.get('/api/lastrestart').then(updateLastRestart, handleError);
 			}
 
 			fetchData();

@@ -2,11 +2,25 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var bitminter = require('bitminter');
+var fs = require('fs');
 var app = express();
 var router = express.Router();
-var port = process.env.PORT || 4000;
+var port = process.env.PORT;
 var username = process.env.USER;
 bitminter.apikey = process.env.API_KEY;
+var logfile = process.env.LOGFILE;
+
+var checkEnv = function (names) {
+	names.forEach(function (name) {
+		if (process.env[name] === undefined) {
+			console.log('Missing environment variable: ' + name);
+			process.exit();
+		}
+	});
+};
+
+checkEnv(['LOGFILE', 'USER', 'API_KEY', 'PORT']);
+
 
 // ----------
 
@@ -29,14 +43,30 @@ function getPoolShiftsJson(req, res) {
 }
 
 function getPoolBlocksBTCJson(req, res) {
-	bitminter.get('pool/blocks', {max: 5, commodity:'BTC'}, function (err, stats) {
+	bitminter.get('pool/blocks', {max: 5, commodity: 'BTC'}, function (err, stats) {
 		res.json(err || stats);
 	});
 }
 
 function getPoolBlocksNMCJson(req, res) {
-	bitminter.get('pool/blocks', {max: 5, commodity:'NMC'}, function (err, stats) {
+	bitminter.get('pool/blocks', {max: 5, commodity: 'NMC'}, function (err, stats) {
 		res.json(err || stats);
+	});
+}
+
+function getLastRestart(req, res) {
+	fs.readFile(logfile, 'utf-8', function (err, data) {
+		if (err) {
+			console.log(err);
+			throw err;
+		}
+
+		var lines = data.trim().split('\n');
+		var last = lines.slice(-1)[0];
+		var date = last.split('at: ')[1];
+		res.json({
+			lastRestart: date
+		})
 	});
 }
 
@@ -65,6 +95,10 @@ router.get('/api/pool/stats', getPoolStatsJson);
 router.get('/api/pool/shifts', getPoolShiftsJson);
 router.get('/api/pool/blocks/btc', getPoolBlocksBTCJson);
 router.get('/api/pool/blocks/nmc', getPoolBlocksNMCJson);
+router.get('/api/lastrestart', getLastRestart);
 
 app.listen(port);
 console.log('Listening on port ' + port);
+console.log('username ' + username);
+console.log('apikey ' + bitminter.apikey);
+console.log('logfile ' + logfile);
